@@ -108,7 +108,7 @@ def adj_matrix(wsi_coords):
         sum = 0
         for j in indices:
             x_j, y_j = wsi_coords[j][0], wsi_coords[j][1]
-            if abs(int(x_i) - int(x_j)) <= 256 and abs(int(y_i) - int(y_j)) <= 256:
+            if abs(int(x_i) - int(x_j)) <= 512 and abs(int(y_i) - int(y_j)) <= 512:
                 adj_s[i][j]=1
                 sum += 1
             if sum == 9:
@@ -132,7 +132,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
 
-        slide_file_path = os.path.join(data_slide_dir, slide_id +'.jpg')
+        slide_file_path = os.path.join(data_slide_dir, slide_id +'.svs')
         wsi = openslide.open_slide(slide_file_path)
         os.makedirs(os.path.join(save_path,  'simclr_files'), exist_ok=True)
 
