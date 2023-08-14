@@ -15,7 +15,7 @@ source ~/.bashrc
 mamba activate  dl_torch
 cd /home/ofourkioti/Projects/GT-2022-histo/
 
-for i in {0..4};
+for i in {0..3};
 do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/gtp_features/" \
 --train_set "TCGA_LUNG_splits/train_${i}.txt" --val_set "TCGA_LUNG_splits/val_${i}.txt" --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
