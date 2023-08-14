@@ -76,9 +76,9 @@ class Trainer(object):
     def train(self, sample, model):
         node_feat, labels, adjs, masks , names= preparefeatureLabel(sample['image'], sample['label'], sample['adj_s'], sample['id'])
 
-        pred,labels,loss = model.forward(node_feat, labels, adjs, masks, names)
+        pred,labels,loss, out = model.forward(node_feat, labels, adjs, masks, names)
 
-        return pred,labels,loss
+        return pred,labels,loss, out
 
 class Evaluator(object):
     def __init__(self, n_class):
