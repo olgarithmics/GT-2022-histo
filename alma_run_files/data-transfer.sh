@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=datatransfer_test
-#SBATCH --output=/home/ofourkioti/Projects/tmi2022/results/datatransfer_test.txt
-#SBATCH --error=/home/ofourkioti/Projects/tmi2022/results/datatransfer_test.err
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/datatransfer_test.txt
+#SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/datatransfer_test.err
 #SBATCH --partition=data-transfer
 #SBATCH --ntasks=1
 #SBATCH --time=100:00:00
