@@ -4,8 +4,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
 #SBATCH --time=100:00:00
-#SBATCH --output=/home/ofourkioti/Projects/tmi2022/results/train_tcga.out
-#SBATCH --error=/home/ofourkioti/Projects/tmi2022/results/train_tcga.err
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/train_tcga.out
+#SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/train_tcga.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
 
@@ -13,7 +13,7 @@ module use /opt/software/easybuild/modules/all/
 module load Mamba
 source ~/.bashrc
 mamba activate  dl_torch
-cd /home/ofourkioti/Projects/tmi2022/
+cd /home/ofourkioti/Projects/GT-2022-histo/
 
 for i in {0..4};
 do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/gtp_features/" \
