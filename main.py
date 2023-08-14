@@ -97,7 +97,7 @@ for epoch in range(num_epochs):
         for i_batch, sample_batched in enumerate(dataloader_train):
             #scheduler(optimizer, i_batch, epoch, best_pred)
 
-            pred, labels, loss, out= trainer.train(sample_batched, model)
+            preds, labels, loss, out= trainer.train(sample_batched, model)
 
             optimizer.zero_grad()
             loss.backward()
