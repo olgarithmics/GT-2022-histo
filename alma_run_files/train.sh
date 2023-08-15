@@ -16,9 +16,9 @@ mamba activate  dl_torch
 cd /home/ofourkioti/Projects/GT-2022-histo/
 
 CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/" \
---train_set "TCGA_LUNG_splits/train_1.txt" --val_set "TCGA_LUNG_splits/val_1.txt" --model_path "graph_transformer/saved_models/" \
+--train_set "TCGA_LUNG_splits/train_3.txt" --val_set "TCGA_LUNG_splits/val_3.txt" --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "tcga_lung_1" \
+--task_name "tcga_lung_3" \
 --batch_size 4 \
 --train \
 --log_interval_local 5
