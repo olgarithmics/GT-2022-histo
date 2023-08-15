@@ -146,7 +146,8 @@ for epoch in range(num_epochs):
 
 
             slide_probs = np.vstack((slide_probs))
-            slide_labels = list(itertools.chain(slide_labels))
+            slide_labels = list(itertools.chain(*slide_labels))
+            print (slide_labels)
             auc = roc_auc_score(slide_labels, slide_probs[:,1].reshape(-1, 1), average="macro")
             fscore = f1_score(slide_labels, np.round(np.clip(slide_preds, 0, 1)), average="macro")
             print('[%d/%d] val agg acc: %.3f' % (total_val_num, total_val_num, evaluator.get_scores()))
