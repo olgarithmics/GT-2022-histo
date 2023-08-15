@@ -131,10 +131,11 @@ for epoch in range(num_epochs):
             for i_batch, sample_batched in enumerate(dataloader_val):
                 #pred, label, _ = evaluator.eval_test(sample_batched, model)
 
-                preds, labels, _ ,out= evaluator.eval_test(sample_batched, model, graphcam)
-                slide_labels.append(labels.cpu().numpy())
+                preds, labels, _ ,out = evaluator.eval_test(sample_batched, model, graphcam)
+
+                slide_labels.append(labels.cpu().numpy().tolist())
                 slide_preds.append(preds.cpu().numpy().tolist())
-                slide_probs.append(out.cpu().numpy()[0].tolist())
+                slide_probs.append(out.cpu().numpy().tolist())
                 
                 total += len(labels)
 
@@ -147,8 +148,10 @@ for epoch in range(num_epochs):
 
             slide_probs = np.vstack((slide_probs))
             slide_labels = list(itertools.chain(*slide_labels))
-            print (slide_labels)
-            print(slide_probs.shape)
+            slide_probs = list(itertools.chain(*slide_probs))
+            slide_preds = list(itertools.chain(*slide_preds))
+            slide_probs =np.reshape(slide_probs, (len(slide_labels), 2))
+
             auc = roc_auc_score(slide_labels, slide_probs[:,1].reshape(-1, 1), average="macro")
             fscore = f1_score(slide_labels, np.round(np.clip(slide_preds, 0, 1)), average="macro")
             print('[%d/%d] val agg acc: %.3f' % (total_val_num, total_val_num, evaluator.get_scores()))
