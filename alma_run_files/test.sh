@@ -20,7 +20,7 @@ do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 2 \
 --data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/' \
---val_set "TCGA_LUNG_splits/test_${i}.txt" \
+--val_set "TCGA_LUNG_splits/val_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
 --task_name "tcga_lung_${i}"  \
