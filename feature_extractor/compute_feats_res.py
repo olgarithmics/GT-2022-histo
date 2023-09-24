@@ -123,8 +123,8 @@ def generate_values_resnet(images, wsi_coords, dist="cosine"):
             values.append(value)
             coords.append((row, column))
 
-    #values = np.reshape(values, (wsi_coords.shape[0], neighbor_indices.shape[1]))
-    return np.array(coords), np.array(values), neighbor_indices
+    values = np.reshape(values, (wsi_coords.shape[0], neighbor_indices.shape[1]))
+    return np.array(coords), values, neighbor_indices
 
 def adj_matrix(wsi_coords,wsi_feats):
     total = wsi_coords.shape[0]
