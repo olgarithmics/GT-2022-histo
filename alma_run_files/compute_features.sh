@@ -7,7 +7,7 @@
 #SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/gtp_feats.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
 #SBATCH --gres=gpu:1
-#SBATCH --partition=gpuhm
+#SBATCH --partition=gpu
 
 module use /opt/software/easybuild/modules/all/
 module load Mamba
