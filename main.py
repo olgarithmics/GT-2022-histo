@@ -161,7 +161,7 @@ for epoch in range(num_epochs):
             slide_preds = list(itertools.chain(*slide_preds))
             slide_probs = np.reshape(slide_probs, (len(slide_labels), 3))
 
-            auc = roc_auc_score(slide_labels, slide_probs[:, 1].reshape(-1, 1), average="macro")
+            auc = roc_auc_score(slide_labels, slide_probs[:, 1].reshape(-1, 1), average="macro", multi_class='ovr')
             fscore = f1_score(slide_labels, np.round(np.clip(slide_preds, 0, 1)), average="macro")
             print('[%d/%d] val agg acc: %.3f' % (total_val_num, total_val_num, evaluator.get_scores()))
             print('[%d/%d] val AUC: %.3f' % (total_val_num, total_val_num, auc))
