@@ -132,7 +132,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
 
-        slide_file_path = os.path.join(data_slide_dir, slide_id +'.svs')
+        slide_file_path = os.path.join(data_slide_dir, slide_id +'.png')
         wsi = openslide.open_slide(slide_file_path)
         os.makedirs(os.path.join(save_path,  'simclr_files'), exist_ok=True)
 
