@@ -24,10 +24,10 @@ cd /home/ofourkioti/Projects/GT-2022-histo/
 #--log_interval_local 5
 
 for i in {0..4};
-do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 3 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/rcc/" \
---train_set "rcc_splits/train_${i}.txt" --val_set "rcc_splits/val_${i}.txt" --model_path "graph_transformer/saved_models/" \
+do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 3 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/PDAC_TMA/" \
+--train_set "pdac_splits//train_${i}.txt" --val_set "pdac_splits//val_${i}.txt" --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "rcc_${i}" \
+--task_name "pdac_${i}" \
 --batch_size 4 \
 --train \
 --log_interval_local 5
