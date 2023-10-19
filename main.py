@@ -159,7 +159,7 @@ for epoch in range(num_epochs):
             slide_labels = list(itertools.chain(*slide_labels))
             slide_probs = list(itertools.chain(*slide_probs))
             slide_preds = list(itertools.chain(*slide_preds))
-            #slide_probs = np.reshape(slide_probs, (len(slide_labels), 3))
+            slide_probs = np.reshape(slide_probs, (len(slide_labels), 3))
 
             auc = roc_auc_score(slide_labels, slide_probs[:, 1].reshape(-1, 1), average="macro")
             #auc = roc_auc_score(slide_labels, slide_probs, average="macro", multi_class='ovr')
