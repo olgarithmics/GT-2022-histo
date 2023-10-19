@@ -18,7 +18,7 @@ cd /home/ofourkioti/Projects/GT-2022-histo/
 for i in {0..4};
 do export CUDA_VISIBLE_DEVICES=0
 python main.py \
---n_class 3 \
+--n_class 2 \
 --data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/colon/' \
 --val_set "pdac_splits/test_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
