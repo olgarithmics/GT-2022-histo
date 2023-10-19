@@ -19,7 +19,7 @@ for i in {0..4};
 do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 3 \
---data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/PDAC_TMA/graphs' \
+--data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/PDAC_TMA/' \
 --val_set "pdac_splits/test_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
