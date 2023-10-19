@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
 #SBATCH --time=100:00:00
-#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/test_pdac.out
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/test_colon.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
@@ -19,14 +19,14 @@ for i in {0..4};
 do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 3 \
---data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/PDAC_TMA/' \
+--data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/colon/' \
 --val_set "pdac_splits/test_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "pdac_${i}"  \
+--task_name "colon_${i}"  \
 --batch_size 1 \
 --test \
 --log_interval_local 5 \
---resume "graph_transformer/saved_models/pdac_${i}.pth"
+--resume "graph_transformer/saved_models/colon_${i}.pth"
 
 done
