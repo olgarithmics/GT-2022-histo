@@ -168,7 +168,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
 
     #######use resnet -18 with pre-trained weights#########
-    model = models.resnet18(pretrained=True, norm_layer=nn.InstanceNorm2d)
+    model = models.resnet18(pretrained=True)
 
     # Remove the final fully connected layer (the classification layer)
     model = torch.nn.Sequential(*list(model.children())[:-1])
