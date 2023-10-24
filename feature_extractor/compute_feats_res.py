@@ -22,7 +22,6 @@ class ToPIL(object):
         img = transforms.functional.to_pil_image(img)
         return img
 
-
 class BagDataset():
     def __init__(self, csv_file, transform=None):
         self.files_list = csv_file
@@ -167,6 +166,13 @@ def adj_matrix(wsi_coords,wsi_feats):
 def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     num_bags = len(bags_list)
 
+
+    #######use resnet -18 with pre-trained weights#########
+    model = models.resnet18(pretrained=True, norm_layer=nn.InstanceNorm2d)
+
+    # Remove the final fully connected layer (the classification layer)
+    model = torch.nn.Sequential(*list(model.children())[:-1])
+
     for i in range(0, num_bags):
 
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
@@ -191,7 +197,8 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
             with torch.no_grad():
                 batch = batch.to(device, non_blocking=True)
                 wsi_coords.append(coords)
-                features, classes = i_classifier(batch)
+                #features, classes = i_classifier(batch)
+                features = model(batch)
                 features = features.cpu().numpy()
                 wsi_feats.append(features)
                 asset_dict = {'features': features, 'coords': coords}
@@ -242,6 +249,9 @@ def main():
     if args.backbone == 'resnet101':
         resnet = models.resnet101(pretrained=False, norm_layer=nn.InstanceNorm2d)
         num_feats = 2048
+    if args.backbone == 'resnet18-pretrained':
+        resnet = models.resnet18(pretrained=True, norm_layer=nn.InstanceNorm2d)
+        num_feats = 512
     for param in resnet.parameters():
         param.requires_grad = False
     resnet.fc = nn.Identity()
