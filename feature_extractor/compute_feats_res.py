@@ -173,6 +173,8 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     # Remove the final fully connected layer (the classification layer)
     model = torch.nn.Sequential(*list(model.children())[:-1])
 
+    model=model.cuda()
+
     for i in range(0, num_bags):
 
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
