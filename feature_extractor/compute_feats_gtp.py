@@ -132,12 +132,19 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
 
-        slide_file_path = os.path.join(data_slide_dir, slide_id +'.png')
+        slide_file_path = os.path.join(data_slide_dir, slide_id +'.svs')
         wsi = openslide.open_slide(slide_file_path)
         os.makedirs(os.path.join(save_path,  'simclr_files'), exist_ok=True)
 
         dataset = Whole_Slide_Bag_FP(file_path=bags_list[i],wsi=wsi, target_patch_size=224, custom_transforms=Compose([ transforms.ToTensor()]))
         dataloader = DataLoader(dataset=dataset, batch_size=512, collate_fn=collate_features, drop_last=False, shuffle=False)
+
+        model = models.resnet18(pretrained=True)
+
+        # Remove the final fully connected layer (the classification layer)
+        model = torch.nn.Sequential(*list(model.children())[:-1])
+
+        model = model.cuda()
 
         wsi_coords=[]
         wsi_feats=[]
@@ -146,7 +153,10 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
                 batch = batch.to(device, non_blocking=True)
                 wsi_coords.append(coords)
-                features, classes = i_classifier(batch)
+                #features, classes = i_classifier(batch)
+                features = model(batch)
+                features = features.view(features.shape[0], -1)
+                features = features.cpu().numpy()
                 wsi_feats.extend(features)
 
         os.makedirs(os.path.join(save_path, 'simclr_files', slide_id), exist_ok=True)
