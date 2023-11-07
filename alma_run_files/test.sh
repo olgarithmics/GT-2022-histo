@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
 #SBATCH --time=100:00:00
-#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/test_colon.out
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/test_cam17.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
@@ -19,14 +19,14 @@ for i in {0..4};
 do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 2 \
---data_path '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/Colonoscopy/' \
---val_set "colon_splits/test_${i}.txt" \
+--data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-17/" \
+--val_set "cam17_splits/val_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "colon_${i}"  \
+--task_name "cam17_${i}"  \
 --batch_size 1 \
 --test \
 --log_interval_local 5 \
---resume "graph_transformer/saved_models/colon_${i}.pth"
+--resume "graph_transformer/saved_models/cam17_${i}.pth"
 
 done
