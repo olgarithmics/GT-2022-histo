@@ -180,11 +180,11 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
         output_path = os.path.join(save_path, 'h5_files/')
 
-        slide_file_path = os.path.join(data_slide_dir, slide_id +'.svs')
+        slide_file_path = os.path.join(data_slide_dir, slide_id +'.tif')
 
         output_path_file = os.path.join(save_path, 'h5_files/' + slide_id + '.h5')
-        if os.path.exists(output_path_file):
-            continue
+        # if os.path.exists(output_path_file):
+        #     continue
 
         wsi = openslide.open_slide(slide_file_path)
         os.makedirs(output_path, exist_ok=True)
@@ -199,12 +199,13 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
             with torch.no_grad():
                 batch = batch.to(device, non_blocking=True)
                 wsi_coords.append(coords)
-                features, classes = i_classifier(batch)
+                #features, classes = i_classifier(batch)
 
-                # features = model(batch)
-                # features = features.view(features.shape[0], -1)
 
-                features = features.cpu().numpy()
+                features = model(batch)
+                features = features.view(features.shape[0], -1)
+
+                #features = features.cpu().numpy()
                 wsi_feats.append(features)
                 asset_dict = {'features': features, 'coords': coords}
                 save_hdf5(output_path_file, asset_dict, attr_dict=None, mode=mode)
@@ -242,6 +243,17 @@ def main():
     parser.add_argument('--slide_dir', default=None, type=str, help='path to the output graph folder')
     args = parser.parse_args()
 
+    def load_model_weights(model, weights):
+
+        model_dict = model.state_dict()
+        weights = {k: v for k, v in weights.items() if k in model_dict}
+        if weights == {}:
+            print('No weight could be loaded..')
+        model_dict.update(weights)
+        model.load_state_dict(model_dict)
+
+        return model
+
     if args.backbone == 'resnet18':
         resnet = models.resnet18(pretrained=False, norm_layer=nn.InstanceNorm2d)
         num_feats = 512
@@ -255,7 +267,7 @@ def main():
         resnet = models.resnet101(pretrained=False, norm_layer=nn.InstanceNorm2d)
         num_feats = 2048
     if args.backbone == 'resnet18-pretrained':
-        resnet = models.resnet18(pretrained=True, norm_layer=nn.InstanceNorm2d)
+        resnet = models.resnet18(pretrained=False, norm_layer=nn.InstanceNorm2d)
         num_feats = 512
     for param in resnet.parameters():
         param.requires_grad = False
@@ -266,17 +278,28 @@ def main():
     if args.weights is None:
         print('No feature extractor')
         return
-    state_dict_weights = torch.load(args.weights)
-    state_dict_init = i_classifier.state_dict()
-    new_state_dict = OrderedDict()
-    for (k, v), (k_0, v_0) in zip(state_dict_weights.items(), state_dict_init.items()):
-        name = k_0
-        new_state_dict[name] = v
-    i_classifier.load_state_dict(new_state_dict, strict=False)
+
     os.makedirs(args.output, exist_ok=True)
     bags_list = glob.glob(args.dataset)
 
-    compute_feats(bags_list, i_classifier, args.slide_dir, args.output)
+    if args.backbone != 'resnet18-pretrained':
+        state_dict_weights = torch.load(args.weights)
+        state_dict_init = i_classifier.state_dict()
+        new_state_dict = OrderedDict()
+        for (k, v), (k_0, v_0) in zip(state_dict_weights.items(), state_dict_init.items()):
+            name = k_0
+            new_state_dict[name] = v
+        i_classifier.load_state_dict(new_state_dict, strict=False)
+        compute_feats(bags_list, i_classifier, args.slide_dir, args.output)
+    else:
+        state = torch.load(args.weights, map_location='cuda:0')
+        state_dict = state['state_dict']
+        for key in list(state_dict.keys()):
+            state_dict[key.replace('model.', '').replace('resnet.', '')] = state_dict.pop(key)
+
+        model = load_model_weights(resnet, state_dict)
+        model.fc =  torch.nn.Sequential()
+        compute_feats(bags_list, model, args.slide_dir, args.output)
 
 if __name__ == '__main__':
     main()
