@@ -201,11 +201,10 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
                 wsi_coords.append(coords)
                 #features, classes = i_classifier(batch)
 
-
                 features = model(batch)
                 features = features.view(features.shape[0], -1)
 
-                #features = features.cpu().numpy()
+                features = features.cpu().numpy()
                 wsi_feats.append(features)
                 asset_dict = {'features': features, 'coords': coords}
                 save_hdf5(output_path_file, asset_dict, attr_dict=None, mode=mode)
