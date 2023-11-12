@@ -10,4 +10,4 @@
 
 #srun rsync -avP /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-16/tiles/* /data/rds/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-16/tiles/
 #srun rsync -avP  /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/PDAC_TMA/graphs/* /data/rds/DBI/DUDBI/DYNCESYS/OlgaF/tmi/PDAC_TMA/graphs/
-srun rsync -avP  /data/rds/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_RCC/* /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_RCC/
+srun rsync -avP  /data/rds/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/* /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/
