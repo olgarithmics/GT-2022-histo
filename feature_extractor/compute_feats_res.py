@@ -14,6 +14,7 @@ from scipy.spatial import distance
 from sklearn.metrics import pairwise_distances
 import openslide
 from sklearn import preprocessing
+from models.resnet_custom import resnet50_baseline
 import itertools
 
 class ToPIL(object):
@@ -168,7 +169,9 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
 
     #######use resnet -18 with pre-trained weights#########
-    model = models.resnet18(pretrained=True)
+    #model = models.resnet18(pretrained=True)
+
+    model = resnet50_baseline(pretrained=True)
 
     # Remove the final fully connected layer (the classification layer)
     model = torch.nn.Sequential(*list(model.children())[:-1])
@@ -180,7 +183,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
         output_path = os.path.join(save_path, 'h5_files/')
 
-        slide_file_path = os.path.join(data_slide_dir, slide_id +'.svs')
+        slide_file_path = os.path.join(data_slide_dir, slide_id +'.tif')
 
         output_path_file = os.path.join(save_path, 'h5_files/' + slide_id + '.h5')
         # if os.path.exists(output_path_file):
