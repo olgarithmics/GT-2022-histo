@@ -174,7 +174,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     model = resnet50_baseline(pretrained=True)
 
     # Remove the final fully connected layer (the classification layer)
-    model = torch.nn.Sequential(*list(model.children())[:-1])
+    #model = torch.nn.Sequential(*list(model.children())[:-1])
 
     model=model.cuda()
 
@@ -188,7 +188,6 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         output_path_file = os.path.join(save_path, 'h5_files/' + slide_id + '.h5')
         # if os.path.exists(output_path_file):
         #     continue
-
         wsi = openslide.open_slide(slide_file_path)
         os.makedirs(output_path, exist_ok=True)
 
