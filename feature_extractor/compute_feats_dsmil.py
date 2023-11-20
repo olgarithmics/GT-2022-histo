@@ -36,7 +36,7 @@ class BagDataset():
 def collate_features(batch):
     img = torch.cat([item[0] for item in batch], dim=0)
     coords = np.vstack([item[1] for item in batch])
-    high_patches = torch.cat([item[2] for item in batch], dim=1)
+    high_patches = torch.cat([item[2] for item in batch], dim=0)
     return [img, coords, high_patches]
 
 class ToTensor(object):
@@ -132,7 +132,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     print (high_patches.shape)
                     reshaped_patches = high_patches.view(-1, 3, 224, 224)
-                    print (reshaped_patches.shape)
+                    print (reshaped_patches)
                     reshaped_patches = reshaped_patches.to(device, non_blocking=True)
                     feats, classes = embedder_high(reshaped_patches)
                     feats = feats.view(reshaped_patches.shape[0],reshaped_patches.shape[1], 512)
