@@ -231,7 +231,7 @@ class Whole_Slide_Bag_FP_LH(Dataset):
             coord = hdf5_file['coords'][idx]
             img = self.wsi.read_region(coord, self.patch_level, (self.patch_size, self.patch_size)).convert('RGB')
 
-            
+
             w_s = int(256 * (pow(2, self.patch_level)))
             h_s = int(256 * (pow(2, self.patch_level)))
             stop_x = coord[0] + w_s
@@ -244,6 +244,7 @@ class Whole_Slide_Bag_FP_LH(Dataset):
                         continue
                     high_patch = high_patch.resize(self.target_patch_size)
                     high_patch = self.roi_transforms(high_patch).unsqueeze(0)
+                    print (high_patch.shape)
                     high_patches.append(high_patch)
             high_patches = torch.cat(high_patches, dim=0)
             print (high_patches.shape)
