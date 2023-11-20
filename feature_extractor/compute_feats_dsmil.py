@@ -130,10 +130,10 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
 
-                    high_patches = high_patches.view(-1, 3, 224, 224)
-                    high_patches = high_patches.to(device, non_blocking=True)
-                    feats, classes = embedder_high(high_patches)
-                    feats = feats.view(low_feats.shape[0], -1, 512)
+                    reshaped_patches = high_patches.view(-1, 3, 224, 224)
+                    reshaped_patches = reshaped_patches.to(device, non_blocking=True)
+                    feats, classes = embedder_high(reshaped_patches)
+                    feats = feats.view(reshaped_patches.shape[0],reshaped_patches.shape[1], 512)
                     print (feats.shape)
 
                     low_feats = low_feats.unsqueeze(1)  # Add a new dimension at index 1
