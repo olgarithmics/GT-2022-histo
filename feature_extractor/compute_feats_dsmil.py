@@ -135,7 +135,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                                         feats = feats.cpu().numpy() + 0.25 * feats_list[count]
                             elif args.tree_fusion == 'cat':
                                         expanded_feats_list = np.expand_dims(feats_list[count], axis=0)
-                                        print (expanded_feats_list.shape, feats.shape)
+
                                         feats = np.concatenate((feats.cpu().numpy(), expanded_feats_list), axis=0)
                             else:
                                         raise NotImplementedError(
