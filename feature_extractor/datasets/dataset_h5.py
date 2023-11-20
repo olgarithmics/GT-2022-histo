@@ -243,10 +243,9 @@ class Whole_Slide_Bag_FP_LH(Dataset):
                     if isWhitePatch(high_patch):
                         continue
                     high_patch = high_patch.resize(self.target_patch_size)
-
-                    print (high_patch.shape)
                     high_patches.append(high_patch)
             high_patches = np.concatenate(high_patches, axis=0)
+            high_patches = self.roi_transforms(high_patches).unsqueeze(0)
             print (high_patches.shape)
             if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
