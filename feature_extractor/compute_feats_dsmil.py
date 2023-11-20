@@ -129,7 +129,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
                     for high_patch in high_patches:
-                            feats, classes = embedder_high(high_patch)
+                            feats, classes = embedder_high(high_patch[None, :])
                             if args.tree_fusion == 'fusion':
                                         feats = feats.cpu().numpy() + 0.25 * feats_list[count]
                             elif args.tree_fusion == 'cat':
