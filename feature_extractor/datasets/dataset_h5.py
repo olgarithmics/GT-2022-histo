@@ -245,7 +245,8 @@ class Whole_Slide_Bag_FP_LH(Dataset):
                     high_patch = high_patch.resize(self.target_patch_size)
                     high_patches.append(np.expand_dims(high_patch,axis=0))
             high_patches = np.concatenate(high_patches, axis=0)
-            high_patches = self.roi_transforms(high_patches).unsqueeze(0)
+            high_patches =  torch.tensor(high_patches)
+
             print (high_patches.shape)
             if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
