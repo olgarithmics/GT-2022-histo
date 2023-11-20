@@ -241,8 +241,8 @@ class Whole_Slide_Bag_FP_LH(Dataset):
                     high_patch = self.wsi.read_region((x, y), 1, (256, 256))
                     if isWhitePatch(high_patch):
                         continue
-                    high_patch = self.roi_transforms(high_patch).unsqueeze(0)
                     high_patch = high_patch.resize(self.target_patch_size)
+                    high_patch = self.roi_transforms(high_patch).unsqueeze(0)
                     high_patches.append(high_patch)
             high_patches = np.concatenate(high_patches, axis=1)
             print (high_patches.shape)
