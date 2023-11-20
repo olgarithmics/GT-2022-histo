@@ -243,10 +243,11 @@ class Whole_Slide_Bag_FP_LH(Dataset):
                     if isWhitePatch(high_patch):
                         continue
                     high_patch = high_patch.resize(self.target_patch_size)
-                    high_patches.append(np.expand_dims(high_patch,axis=0))
-            high_patches = np.concatenate(high_patches, axis=0)
-            high_patches =  torch.tensor(high_patches)
+                    high_patch = self.roi_transforms(high_patch).unsqueeze(0)
+                    high_patches.append(torch.unsqueeze(high_patch, dim=0))
+            high_patches = torch.cat(high_patches, dim=0)
 
+            print (high_patches.shape)
             if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
                 img = self.roi_transforms(img).unsqueeze(0)

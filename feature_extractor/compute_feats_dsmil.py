@@ -120,7 +120,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
             wsi_coords=[]
             for count, (batch, coords, high_patches) in enumerate(low_dataloader):
                 with torch.no_grad():
-                    print (batch.shape)
+
                     batch = batch.to(device, non_blocking=True)
                     wsi_coords.append(coords)
 
