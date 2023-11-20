@@ -125,7 +125,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     feats, classes = embedder_low(batch)
 
-                    features = features.cpu().numpy()
+                    feats = feats.cpu().numpy()
                     feats_list.extend(feats)
 
                     high_patches = high_patches.view(-1, 224, 224, 3)
