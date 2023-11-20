@@ -249,7 +249,7 @@ class Whole_Slide_Bag_FP_LH(Dataset):
             print (high_patches.shape)
             if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
-                print (img.shape)
+                print (img.size)
                 img = self.roi_transforms(img).unsqueeze(0)
             return img, coord, high_patches
 class Dataset_All_Bags(Dataset):
