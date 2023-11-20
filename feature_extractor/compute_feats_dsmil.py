@@ -120,6 +120,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
             wsi_coords=[]
             for count, (batch, coords, high_patches) in enumerate(low_dataloader):
                 with torch.no_grad():
+                    print (batch.shape)
                     batch = batch.to(device, non_blocking=True)
                     wsi_coords.append(coords)
 
@@ -128,7 +129,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     feats = feats.cpu().numpy()
                     feats_list.extend(feats)
-
+                    print (high_patches.shape)
                     high_patches = high_patches.view(-1, 224, 224, 4)
                     high_patches = high_patches.to(device, non_blocking=True)
                     feats, classes = embedder_high(high_patches)
