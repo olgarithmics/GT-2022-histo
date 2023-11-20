@@ -36,7 +36,7 @@ class BagDataset():
 def collate_features(batch):
     img = torch.cat([item[0] for item in batch], dim=0)
     coords = np.vstack([item[1] for item in batch])
-    high_patches = torch.cat([item[2] for item in batch], dim=0)
+    high_patches =[item[2] for item in batch]
     return [img, coords, high_patches]
 
 class ToTensor(object):
@@ -126,34 +126,19 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     low_feats, classes = embedder_low(batch)
 
-
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
-
-                    print (high_patches.shape)
-                    reshaped_patches = high_patches.view(-1, 3, 224, 224)
-                    print (reshaped_patches)
-                    reshaped_patches = reshaped_patches.to(device, non_blocking=True)
-                    feats, classes = embedder_high(reshaped_patches)
-                    feats = feats.view(reshaped_patches.shape[0],reshaped_patches.shape[1], 512)
-                    print (feats.shape)
-
-                    low_feats = low_feats.unsqueeze(1)  # Add a new dimension at index 1
-
-                    # Perform element-wise addition along the first dimension (233)
-                    feats = np.concatenate((feats.cpu().numpy(), low_feats.cpu.numpy()), axis=-1)
-                    print (feats.shape)
-
-
-                    if args.tree_fusion == 'fusion':
-                                feats = feats.cpu().numpy() + 0.25 * feats_list[count]
-                    elif args.tree_fusion == 'cat':
-                                feats = np.concatenate((feats.cpu().numpy(), feats_list[None, :][count]), axis=-1)
-                    else:
-                                raise NotImplementedError(
-                                    f"{args.tree_fusion} is not an excepted option for --tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
-                    feats_tree_list.extend(feats)
-                    sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
+                    for high_patch in high_patches:
+                            feats, classes = embedder_high(high_patch)
+                            if args.tree_fusion == 'fusion':
+                                        feats = feats.cpu().numpy() + 0.25 * feats_list[count]
+                            elif args.tree_fusion == 'cat':
+                                        feats = np.concatenate((feats.cpu().numpy(), feats_list[None, :][count]), axis=-1)
+                            else:
+                                        raise NotImplementedError(
+                                            f"{args.tree_fusion} is not an excepted option for --tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
+                            feats_tree_list.extend(feats)
+                            sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
             if len(feats_tree_list) == 0:
                 print('No valid patch extracted from: ' + low_patches[i])
             else:

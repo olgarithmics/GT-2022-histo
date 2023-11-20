@@ -251,7 +251,7 @@ class Whole_Slide_Bag_FP_LH(Dataset):
             if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
                 img = self.roi_transforms(img).unsqueeze(0)
-            return img, coord, torch.unsqueeze(high_patches, dim=0)
+            return img, coord, high_patches
 class Dataset_All_Bags(Dataset):
 
     def __init__(self, csv_path):
