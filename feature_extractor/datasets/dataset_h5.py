@@ -231,6 +231,7 @@ class Whole_Slide_Bag_FP_LH(Dataset):
             coord = hdf5_file['coords'][idx]
             img = self.wsi.read_region(coord, self.patch_level, (self.patch_size, self.patch_size)).convert('RGB')
 
+            
             w_s = int(256 * (pow(2, self.patch_level)))
             h_s = int(256 * (pow(2, self.patch_level)))
             stop_x = coord[0] + w_s
