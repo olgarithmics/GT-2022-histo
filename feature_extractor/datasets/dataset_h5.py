@@ -18,7 +18,6 @@ import h5py
 
 from random import randrange
 
-
 def eval_transforms(pretrained=False):
     if pretrained:
         mean = (0.485, 0.456, 0.406)
@@ -95,7 +94,6 @@ class Whole_Slide_Bag(Dataset):
         img = self.roi_transforms(img).unsqueeze(0)
         return img, coord
 
-
 class Whole_Slide_Bag_FP(Dataset):
     def __init__(self,
                  file_path,
@@ -159,9 +157,19 @@ class Whole_Slide_Bag_FP(Dataset):
         img = self.roi_transforms(img).unsqueeze(0)
         return img, coord
 
+
 def isWhitePatch(patch, satThresh=5):
-    patch_hsv = cv2.cvtColor(patch, cv2.COLOR_RGB2HSV)
-    return True if np.mean(patch_hsv[:,:,1]) < satThresh else False
+    # Convert PIL image to NumPy array
+    patch_np = np.array(patch)
+
+    # Convert the image from RGB to HSV
+    patch_hsv = cv2.cvtColor(patch_np, cv2.COLOR_RGB2HSV)
+
+    # Calculate the mean saturation value
+    mean_saturation = np.mean(patch_hsv[:, :, 1])
+
+    # Check if the mean saturation is less than the threshold
+    return mean_saturation < satThresh
 
 def isBlackPatch(patch, rgbThresh=40):
     return True if np.all(np.mean(patch, axis = (0,1)) < rgbThresh) else False
@@ -231,11 +239,14 @@ class Whole_Slide_Bag_FP_LH(Dataset):
             for y in range(coord[1], stop_y, 512):
                 for x in range(coord[0], stop_x, 512):
                     high_patch = self.wsi.read_region((x, y), 1, (256, 256))
+                    print (high_patch.shape)
                     if isWhitePatch(high_patch):
                         continue
                     high_patch = self.roi_transforms(high_patch).unsqueeze(0)
                     high_patch = high_patch.resize(self.target_patch_size)
                     high_patches.append(high_patch)
+            high_patches = np.concatenate(high_patches, axis=1)
+
             if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
                 img = self.roi_transforms(img).unsqueeze(0)
