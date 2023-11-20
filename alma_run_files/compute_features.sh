@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=100:00:00
-#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/feats_rcc.out
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/dsmil-feats.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpu
