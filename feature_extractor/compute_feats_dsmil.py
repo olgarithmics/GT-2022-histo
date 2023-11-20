@@ -130,7 +130,9 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
 
+                    print (high_patches.shape)
                     reshaped_patches = high_patches.view(-1, 3, 224, 224)
+                    print (reshaped_patches.shape)
                     reshaped_patches = reshaped_patches.to(device, non_blocking=True)
                     feats, classes = embedder_high(reshaped_patches)
                     feats = feats.view(reshaped_patches.shape[0],reshaped_patches.shape[1], 512)
