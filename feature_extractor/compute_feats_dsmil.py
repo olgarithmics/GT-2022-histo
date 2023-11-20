@@ -36,7 +36,7 @@ class BagDataset():
 def collate_features(batch):
     img = torch.cat([item[0] for item in batch], dim=0)
     coords = np.vstack([item[1] for item in batch])
-    high_patches = [item[2] for item in batch]  #
+    high_patches = torch.cat([item[2] for item in batch], dim=1)
     return [img, coords, high_patches]
 
 class ToTensor(object):
