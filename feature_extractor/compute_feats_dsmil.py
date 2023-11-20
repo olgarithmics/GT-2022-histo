@@ -6,7 +6,7 @@ import torchvision.transforms.functional as VF
 from torchvision import transforms
 import openslide
 from datasets.dataset_h5 import  Whole_Slide_Bag_FP, Whole_Slide_Bag_FP_LH
-
+import cl as cl
 import sys, argparse, os, glob, copy
 import pandas as pd
 import numpy as np
@@ -204,8 +204,8 @@ def main():
     resnet.fc = nn.Identity()
 
     if args.magnification == 'tree' and args.weights_high != None and args.weights_low != None:
-        i_classifier_h = mil.IClassifier(resnet, num_feats, output_class=args.num_classes).cuda()
-        i_classifier_l = mil.IClassifier(copy.deepcopy(resnet), num_feats, output_class=args.num_classes).cuda()
+        i_classifier_h = cl.IClassifier(resnet, num_feats, output_class=args.num_classes).cuda()
+        i_classifier_l = cl.IClassifier(copy.deepcopy(resnet), num_feats, output_class=args.num_classes).cuda()
 
         if args.weights_high == 'ImageNet' or args.weights_low == 'ImageNet' or args.weights == 'ImageNet':
             if args.norm_layer == 'batch':
@@ -242,7 +242,7 @@ def main():
 
 
     elif args.magnification == 'single' or args.magnification == 'high' or args.magnification == 'low':
-        i_classifier = mil.IClassifier(resnet, num_feats, output_class=args.num_classes).cuda()
+        i_classifier = cl.IClassifier(resnet, num_feats, output_class=args.num_classes).cuda()
 
         if args.weights == 'ImageNet':
             if args.norm_layer == 'batch':
