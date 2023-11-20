@@ -124,6 +124,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                     wsi_coords.append(coords)
 
                     feats, classes = embedder_low(batch)
+                    print (feats.shape)
 
                     feats = feats.cpu().numpy()
                     feats_list.extend(feats)
