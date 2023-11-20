@@ -1,4 +1,3 @@
-import dsmil as mil
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -214,7 +213,7 @@ def main():
             else:
                 raise ValueError('Please use batch normalization for ImageNet feature')
         else:
-            weight_path = os.path.join(args.weights_high, 'model.pth')
+            weight_path = os.path.join(args.weights_high, 'model-v0.pth')
             state_dict_weights = torch.load(weight_path)
             for i in range(4):
                 state_dict_weights.popitem()
