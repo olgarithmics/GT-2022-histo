@@ -124,15 +124,23 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                     batch = batch.to(device, non_blocking=True)
                     wsi_coords.append(coords)
 
-                    feats, classes = embedder_low(batch)
-                    print (feats.shape)
+                    low_feats, classes = embedder_low(batch)
 
-                    feats = feats.cpu().numpy()
-                    feats_list.extend(feats)
-                    print (high_patches.shape)
+
+                    low_feats = feats.cpu().numpy()
+                    feats_list.extend(low_feats)
+
                     high_patches = high_patches.view(-1, 3, 224, 224)
                     high_patches = high_patches.to(device, non_blocking=True)
                     feats, classes = embedder_high(high_patches)
+                    feats = feats.view(low_feats.shape[0], -1, 512)
+                    print(feats.shape)
+                    low_feats = low_feats.unsqueeze(1)  # Add a new dimension at index 1
+
+                    # Perform element-wise addition along the first dimension (233)
+                    feats = np.concatenate((feats.cpu().numpy(), low_feats.cpu.numpy()), axis=-1)
+                    print (feats.shape)
+
 
                     if args.tree_fusion == 'fusion':
                                 feats = feats.cpu().numpy() + 0.25 * feats_list[count]
