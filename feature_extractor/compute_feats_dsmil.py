@@ -119,18 +119,20 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
             feats_list = []
             feats_tree_list = []
             wsi_coords=[]
-            for count, (batch, coords, high_patches) in enumerate(low_dataloader):
+            high_patches=[]
+            for count, (batch, coords, high_patch) in enumerate(low_dataloader):
                 with torch.no_grad():
                     batch = batch.to(device, non_blocking=True)
                     wsi_coords.append(coords)
+                    high_patches.append(high_patch)
+
 
                     low_feats, classes = embedder_low(batch)
 
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
-            for count, (batch, coords, high_patches) in enumerate(low_dataloader):
-                with torch.no_grad():
-                    for high_patch in high_patches:
+            with torch.no_grad():
+                for count, high_patch in enumerate(high_patches):
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
                             if args.tree_fusion == 'fusion':
