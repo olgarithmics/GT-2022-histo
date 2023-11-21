@@ -106,7 +106,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
             slide_id = os.path.splitext(os.path.basename(low_patches[i]))[0]
 
 
-            slide_file_path = os.path.join(data_slide_dir, slide_id + '.tif')
+            slide_file_path = os.path.join(data_slide_dir, slide_id + '.svs')
 
             wsi = openslide.open_slide(slide_file_path)
             os.makedirs(save_path, exist_ok=True)
