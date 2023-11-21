@@ -157,7 +157,6 @@ class Whole_Slide_Bag_FP(Dataset):
         img = self.roi_transforms(img).unsqueeze(0)
         return img, coord
 
-
 def isWhitePatch(patch, satThresh=5):
     # Convert PIL image to NumPy array
     patch_np = np.array(patch)
