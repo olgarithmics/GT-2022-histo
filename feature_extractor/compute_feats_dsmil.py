@@ -134,11 +134,15 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                             if args.tree_fusion == 'fusion':
                                         feats = feats.cpu().numpy() + 0.25 * feats_list[count]
                             elif args.tree_fusion == 'cat':
-                                        expanded_feats = np.expand_dims(feats_list[count], axis=0)
+
+                                        feats_single_expanded = np.tile(feats_list[count], (feats.shape[0], 1))
+
+                                        # Concatenate 'feats' and 'feats_single_expanded' along axis 1
+                                        feats = np.concatenate((feats, feats_single_expanded), axis=1)
 
                                         #feats = feats.cpu().numpy()+ expanded_feats
 
-                                        feats=np.concatenate(( feats.cpu().numpy(), expanded_feats), axis=1)
+
                             else:
                                         raise NotImplementedError(
                                             f"{args.tree_fusion} is not an excepted option for --tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
