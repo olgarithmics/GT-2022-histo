@@ -130,6 +130,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
                     print (count)
+                    print (low_feats[:10])
                     for high_patch in high_patches:
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
