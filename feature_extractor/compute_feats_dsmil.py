@@ -138,7 +138,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                                         feats_single_expanded = np.tile(feats_list[count], (feats.shape[0], 1))
 
                                         # Concatenate 'feats' and 'feats_single_expanded' along axis 1
-                                        feats = np.concatenate((feats, feats_single_expanded), axis=1)
+                                        feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
 
                                         #feats = feats.cpu().numpy()+ expanded_feats
 
