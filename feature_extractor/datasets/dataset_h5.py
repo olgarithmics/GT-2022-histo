@@ -229,25 +229,24 @@ class Whole_Slide_Bag_FP_LH(Dataset):
     def __getitem__(self, idx):
         with h5py.File(self.file_path, 'r') as hdf5_file:
             coord = hdf5_file['coords'][idx]
-            img = self.wsi.read_region(coord, self.patch_level, (self.patch_size, self.patch_size)).convert('RGB')
+        img = self.wsi.read_region(coord, self.patch_level, (self.patch_size, self.patch_size)).convert('RGB')
 
-
-            w_s = int(256 * (pow(2, self.patch_level)))
-            h_s = int(256 * (pow(2, self.patch_level)))
-            stop_x = coord[0] + w_s
-            stop_y = coord[1] + h_s
-            high_patches = []
-            for y in range(coord[1], stop_y, 512):
-                for x in range(coord[0], stop_x, 512):
-                    high_patch = self.wsi.read_region((x, y), 1, (256, 256)).convert('RGB')
-                    if isWhitePatch(high_patch):
+        w_s = int(256 * (pow(2, self.patch_level)))
+        h_s = int(256 * (pow(2, self.patch_level)))
+        stop_x = coord[0] + w_s
+        stop_y = coord[1] + h_s
+        high_patches = []
+        for y in range(coord[1], stop_y, 512):
+            for x in range(coord[0], stop_x, 512):
+                high_patch = self.wsi.read_region((x, y), 1, (256, 256)).convert('RGB')
+                if isWhitePatch(high_patch):
                         continue
-                    high_patch = high_patch.resize(self.target_patch_size)
-                    high_patch = self.roi_transforms(high_patch)
-                    high_patches.append(torch.unsqueeze(high_patch, dim=0))
-            high_patches = torch.cat(high_patches, dim=0)
+                high_patch = high_patch.resize(self.target_patch_size)
+                high_patch = self.roi_transforms(high_patch)
+                high_patches.append(torch.unsqueeze(high_patch, dim=0))
+        high_patches = torch.cat(high_patches, dim=0)
 
-            if self.target_patch_size is not None:
+        if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
                 img = self.roi_transforms(img).unsqueeze(0)
             return img, coord, high_patches
