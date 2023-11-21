@@ -104,6 +104,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
     with torch.no_grad():
         for i in range(0, num_bags):
             slide_id = os.path.splitext(os.path.basename(low_patches[i]))[0]
+            print (slide_id)
 
             slide_file_path = os.path.join(data_slide_dir, slide_id + '.tif')
 
@@ -128,7 +129,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
-                    print (len(feats_list))
+                    print (count)
                     for high_patch in high_patches:
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
