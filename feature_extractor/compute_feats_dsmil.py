@@ -99,7 +99,7 @@ def compute_feats(args, bags_list, i_classifier, save_path=None, magnification='
 def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slide_dir, save_path=None):
     embedder_low.eval()
     embedder_high.eval()
-    num_bags = 3
+    num_bags = lwn(low_patches)
     Tensor = torch.FloatTensor
     with torch.no_grad():
         for i in range(0, num_bags):
