@@ -131,6 +131,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
             with torch.no_grad():
                 for count, (batch, coords, high_patches) in enumerate(low_dataloader):
+                    print (len(high_patches))
                     if len(high_patches) == 0:
                         pass
                     else:
