@@ -128,11 +128,12 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
+            print (len(feats_list))
 
             with torch.no_grad():
                 for count, (batch, coords, high_patches) in enumerate(low_dataloader):
                     print (len(high_patches), count, len(low_dataloader))
-                    for high_patch in high_patches:
+                    for patch_count,high_patch in high_patches:
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
                             if args.tree_fusion == 'fusion':
