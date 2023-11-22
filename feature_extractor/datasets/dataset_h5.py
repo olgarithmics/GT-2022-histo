@@ -230,14 +230,15 @@ class Whole_Slide_Bag_FP_LH(Dataset):
             coord = hdf5_file['coords'][idx]
         img = self.wsi.read_region(coord, self.patch_level, (self.patch_size, self.patch_size)).convert('RGB')
 
-        w_s = int(256 * (pow(2, self.patch_level)))
-        h_s = int(256 * (pow(2, self.patch_level)))
+        w_s = int(self.patch_size * (pow(2, self.patch_level)))
+        h_s = int(self.patch_size * (pow(2, self.patch_level)))
         stop_x = coord[0] + w_s
         stop_y = coord[1] + h_s
         high_patches = []
+
         for y in range(coord[1], stop_y, 512):
             for x in range(coord[0], stop_x, 512):
-                high_patch = self.wsi.read_region((x, y), 0, (256, 256)).convert('RGB')
+                high_patch = self.wsi.read_region((x, y), 1, (256, 256)).convert('RGB')
                 if isWhitePatch(high_patch):
                         continue
                 high_patch = high_patch.resize(self.target_patch_size)
