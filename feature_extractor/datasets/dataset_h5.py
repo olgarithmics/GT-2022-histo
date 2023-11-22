@@ -239,8 +239,9 @@ class Whole_Slide_Bag_FP_LH(Dataset):
         for y in range(coord[1], stop_y, 512):
             for x in range(coord[0], stop_x, 512):
                 high_patch = self.wsi.read_region((x, y), 1, (256, 256)).convert('RGB')
-                print (high_patch.size)
+
                 if isWhitePatch(high_patch):
+                        print ('iswhite')
                         continue
                 high_patch = high_patch.resize(self.target_patch_size)
                 high_patch = self.roi_transforms(high_patch)
