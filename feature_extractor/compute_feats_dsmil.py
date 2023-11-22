@@ -133,13 +133,13 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
             with torch.no_grad():
                 for count, (batch, coords, high_patches) in enumerate(low_dataloader):
                     print (len(high_patches), count, len(low_dataloader))
-                    for patch_count,high_patch in high_patches:
+                    for patch_count, high_patch in high_patches:
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
                             if args.tree_fusion == 'fusion':
-                                        feats = feats.cpu().numpy() + 0.25 * feats_list[count]
+                                        feats = feats.cpu().numpy() + 0.25 * feats_list[patch_count]
                             elif args.tree_fusion == 'cat':
-                                        feats_single_expanded = np.tile(feats_list[count], (feats.shape[0], 1))
+                                        feats_single_expanded = np.tile(feats_list[patch_count], (feats.shape[0], 1))
                                         feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
                             else:
                                         raise NotImplementedError(
