@@ -131,32 +131,36 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
             with torch.no_grad():
                 for count, (batch, coords, high_patches) in enumerate(low_dataloader):
+                    if len(high_patches) == 0:
+                        pass
+                    else:
 
-                    for patch_count, high_patch in enumerate(high_patches):
+                        for patch_count, high_patch in enumerate(high_patches):
 
-                            high_patch = high_patch.to(device, non_blocking=True)
-                            feats, classes = embedder_high(high_patch)
-                            if args.tree_fusion == 'fusion':
-                                        feats = feats.cpu().numpy() + 0.25 * feats_list[patch_count]
-                            elif args.tree_fusion == 'cat':
-                                        feats_single_expanded = np.tile(feats_list[patch_count], (feats.shape[0], 1))
-                                        feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
+                                high_patch = high_patch.to(device, non_blocking=True)
+                                print (high_patch.shape)
+                                feats, classes = embedder_high(high_patch)
+                                if args.tree_fusion == 'fusion':
+                                            feats = feats.cpu().numpy() + 0.25 * feats_list[patch_count]
+                                elif args.tree_fusion == 'cat':
+                                            feats_single_expanded = np.tile(feats_list[patch_count], (feats.shape[0], 1))
+                                            feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
 
-                            else:
-                                        raise NotImplementedError(
-                                            f"{args.tree_fusion} is not an excepted option for "
-                                            f"--tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
-                            feats_tree_list.extend(feats)
-                            sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
+                                else:
+                                            raise NotImplementedError(
+                                                f"{args.tree_fusion} is not an excepted option for "
+                                                f"--tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
+                                feats_tree_list.extend(feats)
+                                sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
 
-            if len(feats_tree_list) == 0:
-                print('No valid patch extracted from: ' + low_patches[i])
-            else:
-                df = pd.DataFrame(feats_tree_list)
-                os.makedirs(os.path.join(save_path, low_patches[i].split(os.path.sep)[-2]), exist_ok=True)
-                df.to_csv(os.path.join(save_path, low_patches[i].split(os.path.sep)[-2],
-                                       low_patches[i].split(os.path.sep)[-1] + '.csv'), index=False, float_format='%.4f')
-            print('\n')
+                if len(feats_tree_list) == 0:
+                    print('No valid patch extracted from: ' + low_patches[i])
+                else:
+                    df = pd.DataFrame(feats_tree_list)
+                    os.makedirs(os.path.join(save_path, low_patches[i].split(os.path.sep)[-2]), exist_ok=True)
+                    df.to_csv(os.path.join(save_path, low_patches[i].split(os.path.sep)[-2],
+                                           low_patches[i].split(os.path.sep)[-1] + '.csv'), index=False, float_format='%.4f')
+                print('\n')
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 def main():
@@ -213,6 +217,7 @@ def main():
     if args.magnification == 'tree' and args.weights_high != None and args.weights_low != None:
         i_classifier_h = cl.IClassifier(resnet, num_feats, output_class=args.num_classes).cuda()
         i_classifier_l = cl.IClassifier(copy.deepcopy(resnet), num_feats, output_class=args.num_classes).cuda()
+
 
         if args.weights_high == 'ImageNet' or args.weights_low == 'ImageNet' or args.weights == 'ImageNet':
             if args.norm_layer == 'batch':

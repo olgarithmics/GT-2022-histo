@@ -239,14 +239,15 @@ class Whole_Slide_Bag_FP_LH(Dataset):
         for y in range(coord[1], stop_y, 512):
             for x in range(coord[0], stop_x, 512):
                 high_patch = self.wsi.read_region((x, y), 1, (256, 256)).convert('RGB')
-
                 if isWhitePatch(high_patch):
-                        print ('iswhite')
                         continue
                 high_patch = high_patch.resize(self.target_patch_size)
                 high_patch = self.roi_transforms(high_patch)
                 high_patches.append(torch.unsqueeze(high_patch, dim=0))
-        high_patches = torch.cat(high_patches, dim=0)
+        if len(high_patches) == 0:
+            pass
+        else:
+            high_patches = torch.cat(high_patches, dim=0)
 
         if self.target_patch_size is not None:
                 img = img.resize(self.target_patch_size)
