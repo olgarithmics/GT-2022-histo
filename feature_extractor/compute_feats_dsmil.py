@@ -142,11 +142,13 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                             elif args.tree_fusion == 'cat':
                                         feats_single_expanded = np.tile(feats_list[patch_count], (feats.shape[0], 1))
                                         feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
+                                        print (feats.shape)
                             else:
                                         raise NotImplementedError(
                                             f"{args.tree_fusion} is not an excepted option for --tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
                             feats_tree_list.extend(feats)
                             sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
+            print (len(feats_tree_list))
             if len(feats_tree_list) == 0:
                 print('No valid patch extracted from: ' + low_patches[i])
             else:
