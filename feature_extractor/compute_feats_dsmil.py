@@ -131,28 +131,25 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
             with torch.no_grad():
                 for count, (batch, coords, high_patches) in enumerate(low_dataloader):
-
-                    if len(high_patches) == 0:
-                        pass
-                    else:
-
                         for patch_count, high_patch in enumerate(high_patches):
-                                print (high_patch)
-                                high_patch = high_patch.to(device, non_blocking=True)
-                                print (high_patch.shape)
-                                feats, classes = embedder_high(high_patch)
-                                if args.tree_fusion == 'fusion':
-                                            feats = feats.cpu().numpy() + 0.25 * feats_list[patch_count]
-                                elif args.tree_fusion == 'cat':
-                                            feats_single_expanded = np.tile(feats_list[patch_count], (feats.shape[0], 1))
-                                            feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
-
+                                if len(high_patch) == 0:
+                                    pass
                                 else:
-                                            raise NotImplementedError(
-                                                f"{args.tree_fusion} is not an excepted option for "
-                                                f"--tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
-                                feats_tree_list.extend(feats)
-                                sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
+                                    high_patch = high_patch.to(device, non_blocking=True)
+                                    print (high_patch.shape)
+                                    feats, classes = embedder_high(high_patch)
+                                    if args.tree_fusion == 'fusion':
+                                                feats = feats.cpu().numpy() + 0.25 * feats_list[patch_count]
+                                    elif args.tree_fusion == 'cat':
+                                                feats_single_expanded = np.tile(feats_list[patch_count], (feats.shape[0], 1))
+                                                feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
+
+                                    else:
+                                                raise NotImplementedError(
+                                                    f"{args.tree_fusion} is not an excepted option for "
+                                                    f"--tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
+                                    feats_tree_list.extend(feats)
+                                    sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
 
                 if len(feats_tree_list) == 0:
                     print('No valid patch extracted from: ' + low_patches[i])
