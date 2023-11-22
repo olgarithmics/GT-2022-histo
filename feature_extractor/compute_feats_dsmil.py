@@ -148,7 +148,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                                             f"{args.tree_fusion} is not an excepted option for --tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
                             feats_tree_list.extend(feats)
                             sys.stdout.write('\r Computed: {}/{} -- {}/{}'.format(i + 1, num_bags, count + 1, len(low_patches)))
-            print ('tree_list:' len(feats_tree_list))
+            print ('tree_list:', len(feats_tree_list))
             if len(feats_tree_list) == 0:
                 print('No valid patch extracted from: ' + low_patches[i])
             else:
