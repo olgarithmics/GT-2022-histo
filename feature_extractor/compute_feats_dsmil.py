@@ -134,6 +134,7 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                 for count, (batch, coords, high_patches) in enumerate(low_dataloader):
                     print (len(high_patches), count, len(low_dataloader))
                     for patch_count, high_patch in high_patches:
+                            print (high_patch)
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
                             if args.tree_fusion == 'fusion':
