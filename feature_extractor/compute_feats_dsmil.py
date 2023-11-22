@@ -99,12 +99,11 @@ def compute_feats(args, bags_list, i_classifier, save_path=None, magnification='
 def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slide_dir, save_path=None):
     embedder_low.eval()
     embedder_high.eval()
-    num_bags =len(low_patches)
+    num_bags = 3
     Tensor = torch.FloatTensor
     with torch.no_grad():
         for i in range(0, num_bags):
             slide_id = os.path.splitext(os.path.basename(low_patches[i]))[0]
-
 
             slide_file_path = os.path.join(data_slide_dir, slide_id + '.tif')
 
@@ -129,9 +128,11 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
 
                     low_feats = low_feats.cpu().numpy()
                     feats_list.extend(low_feats)
+
             with torch.no_grad():
-                for count, high_patch_batch in enumerate(high_patches_batches):
-                    for high_patch in high_patch_batch:
+                for count, (batch, coords, high_patches) in enumerate(low_dataloader):
+                    print (len(high_patches))
+                    for high_patch in high_patches:
                             high_patch = high_patch.to(device, non_blocking=True)
                             feats, classes = embedder_high(high_patch)
                             if args.tree_fusion == 'fusion':
@@ -139,8 +140,6 @@ def compute_tree_feats(args, low_patches, embedder_low, embedder_high, data_slid
                             elif args.tree_fusion == 'cat':
                                         feats_single_expanded = np.tile(feats_list[count], (feats.shape[0], 1))
                                         feats = np.concatenate((feats.cpu().numpy(), feats_single_expanded), axis=1)
-
-
                             else:
                                         raise NotImplementedError(
                                             f"{args.tree_fusion} is not an excepted option for --tree_fusion. This argument accepts 2 options: 'fusion' and 'cat'.")
