@@ -143,9 +143,9 @@ for epoch in range(num_epochs):
 
                 preds, labels, _, out = evaluator.eval_test(sample_batched, model, graphcam)
 
-                slide_labels.append(labels.cpu().numpy().tolist())
-                slide_preds.append(preds.cpu().numpy().tolist())
-                slide_probs.append(out.cpu().numpy().tolist())
+                slide_labels.append(labels.cpu().detach().numpy().tolist())
+                slide_preds.append(preds.cpu().detach().numpy().tolist())
+                slide_probs.append(out.cpu().detach().numpy().tolist())
 
                 total += len(labels)
 
@@ -162,7 +162,9 @@ for epoch in range(num_epochs):
             slide_probs = np.reshape(slide_probs, (len(slide_labels), 2))
 
             auc = roc_auc_score(slide_labels, slide_probs[:, 1].reshape(-1, 1), average="macro")
-            fscore = f1_score(slide_labels, np.clip(slide_preds, 0, 1), average="macro")
+            fscore = f1_score(slide_labels, np.clip(slide_preds, 0, 1))
+            recall = recall_score(slide_labels, np.clip(slide_preds, 0, 1))
+            precision = precision_score(slide_labels, np.clip(slide_preds, 0, 1))
 
             # auc = roc_auc_score(slide_labels, slide_probs, average="macro", multi_class='ovr')
             #
@@ -170,6 +172,8 @@ for epoch in range(num_epochs):
             print('[%d/%d] val agg acc: %.3f' % (total_val_num, total_val_num, evaluator.get_scores()))
             print('[%d/%d] val AUC: %.3f' % (total_val_num, total_val_num, auc))
             print('[%d/%d] val fscore: %.3f' % (total_val_num, total_val_num, fscore))
+            print('[%d/%d] val recall: %.3f' % (total_val_num, total_val_num, recall))
+            print('[%d/%d] val precision: %.3f' % (total_val_num, total_val_num, precision))
 
             evaluator.plot_cm()
 

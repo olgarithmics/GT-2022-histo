@@ -20,7 +20,7 @@ do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 2 \
 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-17/" \
---val_set "cam17_splits/val_${i}.txt" \
+--val_set "cam17_splits/test_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
 --task_name "cam17_${i}"  \
