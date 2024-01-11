@@ -19,14 +19,14 @@ for i in {0..4};
 do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 2 \
---data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-17/" \
---val_set "cam17_splits/test_${i}.txt" \
+--data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tmi_feats/" \
+--val_set "colon_splits/test_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "cam17_${i}"  \
+--task_name "colon_${i}"  \
 --batch_size 1 \
 --test \
 --log_interval_local 5 \
---resume "graph_transformer/saved_models/cam17_${i}.pth"
+--resume "graph_transformer/saved_models/colon_${i}.pth"
 
 done
