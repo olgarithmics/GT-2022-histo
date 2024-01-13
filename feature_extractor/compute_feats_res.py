@@ -183,14 +183,12 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
         output_path = os.path.join(save_path, 'h5_files/')
 
-        try:
-            slide_file_path = os.path.join(data_slide_dir, slide_id +'.ndpi')
+        if os.path.exists(os.path.join(data_slide_dir, slide_id +'.ndpi')):
+            slide_file_path = os.path.join(data_slide_dir, slide_id + '.ndpi')
             wsi = openslide.open_slide(slide_file_path)
-        except openslide.OpenSlideError as e:
-            print(f"Error opening slide: {e}")
+        else:
             slide_file_path = os.path.join(data_slide_dir, slide_id + '.svs')
             wsi = openslide.open_slide(slide_file_path)
-
 
         output_path_file = os.path.join(save_path, 'h5_files/' + slide_id + '.h5')
         # if os.path.exists(output_path_file):
