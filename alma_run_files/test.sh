@@ -15,7 +15,7 @@ source ~/.bashrc
 mamba activate  dl_torch
 cd /home/ofourkioti/Projects/GT-2022-histo/
 
-for i in {0..4};
+for i in {0..5};
 do export CUDA_VISIBLE_DEVICES=0
 python main.py \
 --n_class 2 \
