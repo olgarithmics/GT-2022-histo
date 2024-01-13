@@ -108,7 +108,7 @@ def generate_values_resnet(images, wsi_coords, dist="cosine"):
 
     """
     patch_distances = pairwise_distances(wsi_coords, metric='euclidean', n_jobs=1)
-    neighbor_indices = np.argsort(patch_distances, axis=1)[:, :8]
+    neighbor_indices = np.argsort(patch_distances, axis=1)[:, :16]
     rows = np.asarray([[enum] * len(item) for enum, item in enumerate(neighbor_indices)]).ravel()
     columns = neighbor_indices.ravel()
     values = []
@@ -171,24 +171,31 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     #######use resnet -18 with pre-trained weights#########
     #model = models.resnet18(pretrained=True)
 
-    model = resnet50_baseline(pretrained=True)
+    #model = resnet50_baseline(pretrained=True)
 
     # Remove the final fully connected layer (the classification layer)
     #model = torch.nn.Sequential(*list(model.children())[:-1])
 
-    model=model.cuda()
+    #model=model.cuda()
 
     for i in range(0, num_bags):
 
         slide_id = os.path.splitext(os.path.basename(bags_list[i]))[0]
         output_path = os.path.join(save_path, 'h5_files/')
 
-        slide_file_path = os.path.join(data_slide_dir, slide_id +'.tif')
+        try:
+            slide_file_path = os.path.join(data_slide_dir, slide_id +'.ndpi')
+            wsi = openslide.open_slide(slide_file_path)
+        except openslide.OpenSlideError as e:
+            print(f"Error opening slide: {e}")
+            slide_file_path = os.path.join(data_slide_dir, slide_id + '.svs')
+            wsi = openslide.open_slide(slide_file_path)
+
 
         output_path_file = os.path.join(save_path, 'h5_files/' + slide_id + '.h5')
         # if os.path.exists(output_path_file):
         #     continue
-        wsi = openslide.open_slide(slide_file_path)
+
         os.makedirs(output_path, exist_ok=True)
 
         dataset = Whole_Slide_Bag_FP(file_path=bags_list[i],wsi=wsi, target_patch_size=224, custom_transforms=Compose([transforms.ToTensor()]))
@@ -201,10 +208,10 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
             with torch.no_grad():
                 batch = batch.to(device, non_blocking=True)
                 wsi_coords.append(coords)
-                #features, classes = i_classifier(batch)
+                features, classes = i_classifier(batch)
 
-                features = model(batch)
-                features = features.view(features.shape[0], -1)
+                # features = model(batch)
+                # features = features.view(features.shape[0], -1)
 
                 features = features.cpu().numpy()
                 wsi_feats.append(features)
