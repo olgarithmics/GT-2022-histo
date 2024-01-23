@@ -191,8 +191,8 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
             wsi = openslide.open_slide(slide_file_path)
 
         output_path_file = os.path.join(save_path, 'h5_files/' + slide_id + '.h5')
-        # if os.path.exists(output_path_file):
-        #     continue
+        if os.path.exists(output_path_file):
+            continue
 
         os.makedirs(output_path, exist_ok=True)
 
