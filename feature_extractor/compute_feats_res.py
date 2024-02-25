@@ -171,12 +171,12 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     #######use resnet -18 with pre-trained weights#########
     #model = models.resnet18(pretrained=True)
 
-    #model = resnet50_baseline(pretrained=True)
-
-    # Remove the final fully connected layer (the classification layer)
-    #model = torch.nn.Sequential(*list(model.children())[:-1])
-
-    #model=model.cuda()
+    # model = resnet50_baseline(pretrained=True)
+    #
+    # #Remove the final fully connected layer (the classification layer)
+    # model = torch.nn.Sequential(*list(model.children())[:-1])
+    #
+    # model=model.cuda()
 
     for i in range(0, num_bags):
 
