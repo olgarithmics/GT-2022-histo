@@ -173,7 +173,6 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
     # model = resnet50_baseline(pretrained=True)
     #
-    # #Remove the final fully connected layer (the classification layer)
     # model = torch.nn.Sequential(*list(model.children())[:-1])
     #
     # model=model.cuda()
