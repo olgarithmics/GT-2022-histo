@@ -26,7 +26,7 @@ cd /home/ofourkioti/Projects/GT-2022-histo/feature_extractor/
 
 
 
-python compute_feats_res.py --weights "TCGA_feature_extractor/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/res18_feats/" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/
+python compute_feats_res.py --weights "TCGA_feature_extractor/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/res18_feats/" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_BRCA/
 
 #python compute_feats_gtp.py --weights "TCGA_feature_extractor/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/graphs" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/TCGA_flat/
 
