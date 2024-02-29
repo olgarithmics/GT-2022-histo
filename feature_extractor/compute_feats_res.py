@@ -219,6 +219,9 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         wsi_coords = np.vstack(wsi_coords)
         wsi_feats = np.vstack(wsi_feats)
 
+        print('features size: ', wsi_feats.shape)
+
+
         adj_coords, similarities, neighbor_indices = generate_values_resnet(wsi_feats, wsi_coords)
         #adj_coords ,similarities = adj_matrix(wsi_coords, wsi_feats)
 
