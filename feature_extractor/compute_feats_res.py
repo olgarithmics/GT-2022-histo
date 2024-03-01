@@ -228,13 +228,12 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
         save_hdf5(output_path_file, asset_dict, attr_dict=None, mode=mode)
 
-        # file = h5py.File(output_path_file, "r")
-        #
-        # print('features size: ', wsi_feats.shape)
-        # print('similarities: ', file['similarities'][:].shape)
-        # features = torch.from_numpy(wsi_feats)
-        # os.makedirs(os.path.join(save_path, 'pt_files'), exist_ok=True)
-        # torch.save(features, os.path.join(save_path, 'pt_files', slide_id + '.pt'))
+        file = h5py.File(output_path_file, "r")
+        print('features size: ', wsi_feats.shape)
+        print('similarities: ', file['similarities'][:].shape)
+        features = torch.from_numpy(wsi_feats)
+        os.makedirs(os.path.join(save_path, 'pt_files'), exist_ok=True)
+        torch.save(features, os.path.join(save_path, 'pt_files', slide_id + '.pt'))
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 def main():

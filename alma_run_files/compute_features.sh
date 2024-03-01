@@ -2,12 +2,13 @@
 #SBATCH --job-name=PatchExtractor
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=10
-#SBATCH --time=100:00:00
+#SBATCH --cpus-per-task=24
+#SBATCH --time=76:00:00
 #SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/dsmil-feats.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
-#SBATCH --gres=gpu:1
-#SBATCH --partition=gpuhm
+#SBATCH --partition=smp
+
+
 
 module use /opt/software/easybuild/modules/all/
 module load Mamba
