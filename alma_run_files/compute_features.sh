@@ -6,7 +6,9 @@
 #SBATCH --time=76:00:00
 #SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/dsmil-feats.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
+#SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
+
 
 
 module use /opt/software/easybuild/modules/all/
