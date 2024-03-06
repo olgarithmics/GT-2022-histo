@@ -171,11 +171,11 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     #######use resnet -18 with pre-trained weights#########
     #model = models.resnet18(pretrained=True)
 
-    # model = resnet50_baseline(pretrained=True)
-    #
-    # model = torch.nn.Sequential(*list(model.children())[:-1])
-    #
-    # model=model.cuda()
+    model = resnet50_baseline(pretrained=True)
+
+    model = torch.nn.Sequential(*list(model.children())[:-1])
+
+    model=model.cuda()
 
     for i in range(0, num_bags):
 
@@ -205,10 +205,10 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
             with torch.no_grad():
                 batch = batch.to(device, non_blocking=True)
                 wsi_coords.append(coords)
-                features, classes = i_classifier(batch)
+                #features, classes = i_classifier(batch)
 
-                # features = model(batch)
-                # features = features.view(features.shape[0], -1)
+                features = model(batch)
+                features = features.view(features.shape[0], -1)
 
                 features = features.cpu().numpy()
                 wsi_feats.append(features)
