@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=12
 #SBATCH --time=76:00:00
-#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/dsmil-feats.out
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/brca_feats.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
@@ -26,9 +26,9 @@ cd /home/ofourkioti/Projects/GT-2022-histo/feature_extractor/
 #python compute_feats_gtp.py --weights "DSMIL_extractors/camelyon/model-v0.pth" --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-17/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-17/graphs/" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/camelyon17/
 #python compute_feats_res.py --weights "DSMIL_extractors/camelyon/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/SAR/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/SAR/feats/" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/SAR/
 
-python compute_feats_res.py --weights "TCGA_feature_extractor/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/res18_feats/" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/
+#python compute_feats_res.py --weights "TCGA_feature_extractor/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/res50_feats/" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/
 
-#python compute_feats_gtp.py --weights "TCGA_feature_extractor/model-v0.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/graphs" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_LUNG/
+python compute_feats_gtp.py --weights "runs/tcga_breast/checkpoints/brca_model.pth"  --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/graphs" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_BRCA/
 
 #python compute_feats_gtp.py --weights "DSMIL_extractors/camelyon/model-v0.pth" --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/rcc/patches/*"  --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/rcc/graphs" --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/TCGA_RCC/
 #python compute_feats_dsmil.py --weights_low "low_high_mag_embedders_camleyon/5x/" --batch_size 512 --weights_high "low_high_mag_embedders_camleyon/20x/" --dataset "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-16/magnification_5x/patches/*" --output "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-16/low_high_feats/" --magnification tree --slide_dir /data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/slides/camelyon16/
