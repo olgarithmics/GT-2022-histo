@@ -175,7 +175,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         # save adjacent matrix
         adj_s = adj_matrix(wsi_coords)
         torch.save(adj_s, os.path.join(save_path, 'simclr_files', slide_id, 'adj_s.pt'))
-        print('\r Computed: {}/{}'.format(i + 1, num_bags))
+        print('\r Computed: {}/{}'.format(i + 1, num_bags),flush=True)
 
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
