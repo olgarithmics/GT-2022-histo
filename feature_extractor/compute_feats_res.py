@@ -14,16 +14,15 @@ from scipy.spatial import distance
 from sklearn.metrics import pairwise_distances
 import openslide
 from sklearn import preprocessing
-from models.resnet_custom import resnet50_baseline
 import itertools
 
 class ToPIL(object):
     def __call__(self, sample):
-        img = sample
-        img = transforms.functional.to_pil_image(img)
+        img = transforms.functional.to_pil_image(sample)
         return img
 
-class BagDataset():
+
+class BagDataset:
     def __init__(self, csv_file, transform=None):
         self.files_list = csv_file
         self.transform = transform
@@ -33,9 +32,7 @@ class BagDataset():
 
     def __getitem__(self, idx):
         temp_path = self.files_list[idx]
-        img = os.path.join(temp_path)
-        img = Image.open(img)
-        img = img.resize((224, 224))
+        img = Image.open(os.path.join(temp_path)).resize((224, 224))
         sample = {'input': img}
 
         if self.transform:
@@ -45,8 +42,7 @@ class BagDataset():
 
 class ToTensor(object):
     def __call__(self, sample):
-        img = sample['input']
-        img = VF.to_tensor(img)
+        img = VF.to_tensor(sample['input'])
         return {'input': img}
 
 
@@ -59,32 +55,39 @@ class Compose(object):
             img = t(img)
         return img
 
+
 def bag_dataset(args, csv_file_path):
-    transformed_dataset = BagDataset(csv_file=csv_file_path,
-                                     transform=Compose([
-                                         ToTensor()
-                                     ]))
-    dataloader = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False,
-                            num_workers=args.num_workers, drop_last=False)
+    transformed_dataset = BagDataset(
+        csv_file=csv_file_path,
+        transform=Compose([ToTensor()])
+    )
+    dataloader = DataLoader(
+        transformed_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=args.num_workers,
+        drop_last=False
+    )
     return dataloader, len(transformed_dataset)
 
-def collate_features(batch):
-	img = torch.cat([item[0] for item in batch], dim = 0)
-	coords = np.vstack([item[1] for item in batch])
-	return [img, coords]
 
-def save_hdf5(output_path, asset_dict, attr_dict= None, mode='a'):
-    file = h5py.File(output_path, mode)
-    for key, val in asset_dict.items():
-        data_shape = val.shape
-        if key not in file:
-            data_type = val.dtype
-            chunk_shape = (1, ) + data_shape[1:]
-            maxshape = (None, ) + data_shape[1:]
-            dset = file.create_dataset(key, shape=data_shape, maxshape=maxshape, chunks=chunk_shape, dtype=data_type)
-            dset[:] = val
-            if attr_dict is not None:
-                if key in attr_dict.keys():
+def collate_features(batch):
+    img = torch.cat([item[0] for item in batch], dim=0)
+    coords = np.vstack([item[1] for item in batch])
+    return [img, coords]
+
+
+def save_hdf5(output_path, asset_dict, attr_dict=None, mode='a'):
+    with h5py.File(output_path, mode) as file:
+        for key, val in asset_dict.items():
+            data_shape = val.shape
+            if key not in file:
+                data_type = val.dtype
+                chunk_shape = (1,) + data_shape[1:]
+                maxshape = (None,) + data_shape[1:]
+                dset = file.create_dataset(key, shape=data_shape, maxshape=maxshape, chunks=chunk_shape, dtype=data_type)
+                dset[:] = val
+                if attr_dict and key in attr_dict:
                     for attr_key, attr_val in attr_dict[key].items():
                         dset.attrs[attr_key] = attr_val
         else:
@@ -94,7 +97,7 @@ def save_hdf5(output_path, asset_dict, attr_dict= None, mode='a'):
     file.close()
     return output_path
 
-def generate_values_resnet(images, wsi_coords, dist="cosine"):
+def generate_values_resnet(images, wsi_coords, dist="euclidean"):
     """
 
     Parameters
@@ -116,10 +119,12 @@ def generate_values_resnet(images, wsi_coords, dist="cosine"):
     for row, column in zip(rows, columns):
             m1 = np.expand_dims(images[int(row)], axis=0)
             m2 = np.expand_dims(images[int(column)], axis=0)
-            # if (abs(int(wsi_coords[int(row)][0]) - int(wsi_coords[int(column)][0])))>=1024 and (abs(int(wsi_coords[int(row)][1]) - int(wsi_coords[int(column)][1])))>=1024 :
-            #         value=np.inf
-            # else:
-            value = distance.cdist(m1.reshape(1, -1), m2.reshape(1, -1), dist)[0][0]
+
+            m1 = np.array(m1, dtype=np.float64)
+            m2 = np.array(m2, dtype=np.float64)
+
+            #value = distance.cdist(m1.reshape(1, -1), m2.reshape(1, -1), dist)[0][0]
+            value = np.linalg.norm(m1.reshape(1, -1) - m2.reshape(1, -1))[0][0]
             values.append(value)
             coords.append((row, column))
 
@@ -171,11 +176,11 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
     #######use resnet -18 with pre-trained weights#########
     #model = models.resnet18(pretrained=True)
 
-    model = resnet50_baseline(pretrained=True)
-
-    model = torch.nn.Sequential(*list(model.children())[:-1])
-
-    model=model.cuda()
+    # model = resnet50_baseline(pretrained=True)
+    #
+    # model = torch.nn.Sequential(*list(model.children())[:-1])
+    #
+    # model=model.cuda()
 
     for i in range(0, num_bags):
 
@@ -205,10 +210,10 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
             with torch.no_grad():
                 batch = batch.to(device, non_blocking=True)
                 wsi_coords.append(coords)
-                #features, classes = i_classifier(batch)
+                features, classes = i_classifier(batch)
 
-                features = model(batch)
-                features = features.view(features.shape[0], -1)
+                # features = model(batch)
+                # features = features.view(features.shape[0], -1)
 
                 features = features.cpu().numpy()
                 wsi_feats.append(features)
@@ -219,7 +224,7 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         wsi_coords = np.vstack(wsi_coords)
         wsi_feats = np.vstack(wsi_feats)
 
-        print('features size: ', wsi_feats.shape)
+        print('features size: ', wsi_feats.shape, flush=True)
 
         adj_coords, similarities, neighbor_indices = generate_values_resnet(wsi_feats, wsi_coords)
         #adj_coords ,similarities = adj_matrix(wsi_coords, wsi_feats)
@@ -229,8 +234,8 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
         save_hdf5(output_path_file, asset_dict, attr_dict=None, mode=mode)
 
         file = h5py.File(output_path_file, "r")
-        print('features size: ', wsi_feats.shape)
-        print('similarities: ', file['similarities'][:].shape)
+        print('features size: ', wsi_feats.shape, flush=True)
+        print('similarities: ', file['similarities'][:].shape, flush=True)
         features = torch.from_numpy(wsi_feats)
         os.makedirs(os.path.join(save_path, 'pt_files'), exist_ok=True)
         torch.save(features, os.path.join(save_path, 'pt_files', slide_id + '.pt'))
