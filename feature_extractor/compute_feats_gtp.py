@@ -165,12 +165,14 @@ def compute_feats( bags_list, i_classifier, data_slide_dir, save_path):
 
                 wsi_feats.extend(features)
 
+
         os.makedirs(os.path.join(save_path, 'simclr_files', slide_id), exist_ok=True)
         wsi_coords = np.vstack(wsi_coords)
         txt_file = open(os.path.join(save_path, 'simclr_files', slide_id, 'c_idx.txt'), "w+")
         save_coords(txt_file, wsi_coords)
         # save node features
         output = torch.stack(wsi_feats, dim=0).cuda()
+        print('features size: ', output.shape, flush=True)
         torch.save(output, os.path.join(save_path, 'simclr_files', slide_id, 'features.pt'))
         # save adjacent matrix
         adj_s = adj_matrix(wsi_coords)
