@@ -123,8 +123,8 @@ def generate_values_resnet(images, wsi_coords, dist="euclidean"):
             m1 = np.array(m1, dtype=np.float64)
             m2 = np.array(m2, dtype=np.float64)
 
-            #value = distance.cdist(m1.reshape(1, -1), m2.reshape(1, -1), dist)[0][0]
-            value = np.linalg.norm(m1.reshape(1, -1) - m2.reshape(1, -1))[0][0]
+            value = distance.cdist(m1.reshape(1, -1), m2.reshape(1, -1), dist)[0][0]
+            #value = np.linalg.norm(m1.reshape(1, -1) - m2.reshape(1, -1))[0][0]
             values.append(value)
             coords.append((row, column))
 
