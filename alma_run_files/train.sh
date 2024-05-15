@@ -24,10 +24,12 @@ cd /home/ofourkioti/Projects/GT-2022-histo/
 #--log_interval_local 5
 
 for i in {0..4};
-do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/cam-17/" \
---train_set "cam17_splits/train_${i}.txt" --val_set "cam17_splits/val_${i}.txt" --model_path "graph_transformer/saved_models/" \
+do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/" \
+--train_set "/home/ofourkioti/Projects/HistoTree/tcga_lung_files/train_${i}.txt" \
+--val_set "/home/ofourkioti/Projects/HistoTree/tcga_lung_files//val_${i}.txt" \
+--model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "cam17_${i}" \
+--task_name "gtp_lung_${i}" \
 --batch_size 4 \
 --train \
 --log_interval_local 5

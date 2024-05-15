@@ -27,12 +27,13 @@ class Classifier(nn.Module):
         self.cls_token = nn.Parameter(torch.zeros(1, 1, self.embed_dim))
         self.criterion = nn.CrossEntropyLoss()
 
+        self._fc1 = nn.Sequential(nn.Linear(1024, 512), nn.ReLU())
+
         self.bn = 1
         self.add_self = 1
         self.normalize_embedding = 1
         self.conv1 = GCNBlock(512,self.embed_dim,self.bn,self.add_self,self.normalize_embedding,0.,0)       # 64->128
         self.pool1 = Linear(self.embed_dim, self.node_cluster_num)                                          # 100-> 20
-
 
     def forward(self,node_feat,labels,adj,mask,file_names,is_print=False, graphcam_flag=False):
         # node_feat, labels = self.PrepareFeatureLabel(batch_graph)
@@ -47,7 +48,7 @@ class Classifier(nn.Module):
         concats=[]
         
         layer_acc=[]
-
+        X=self._fc1(X)
         X=mask.unsqueeze(2)*X
         X = self.conv1(X, adj, mask)
         s = self.pool1(X)
@@ -55,8 +56,8 @@ class Classifier(nn.Module):
         if graphcam_flag:
             s_matrix = torch.argmax(s[0], dim=1)
             from os import path
-            torch.save(s_matrix, '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/graphcam/{}_s_matrix.pt'.format(file_names[0][0]))
-            torch.save(s[0], '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/graphcam/{}_s_matrix_ori.pt'.format(file_names[0][0]))
+            torch.save(s_matrix, '/home/admin_ofourkioti/Documents/data/colon/graphcam_4/{}_s_matrix.pt'.format(file_names[0][0]))
+            torch.save(s[0], '/home/admin_ofourkioti/Documents/data/colon/graphcam_4/{}_s_matrix_ori.pt'.format(file_names[0][0]))
             
             if path.exists('graphcam/att_1.pt'):
                 os.remove('graphcam/att_1.pt')
@@ -80,7 +81,7 @@ class Classifier(nn.Module):
         if graphcam_flag:
             print('GraphCAM enabled')
             p = F.softmax(out)
-            torch.save(p, '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/graphcam/{}_prob.pt'.format(file_names[0][0]))
+            torch.save(p, '/home/admin_ofourkioti/Documents/data/colon/graphcam_4/{}_prob.pt'.format(file_names[0][0]))
             index = np.argmax(out.cpu().data.numpy(), axis=-1)
 
             for index_ in range(2):
@@ -96,6 +97,6 @@ class Classifier(nn.Module):
                 cam = self.transformer.relprop(torch.tensor(one_hot_vector).to(X.device), method="transformer_attribution", is_ablation=False, 
                                             start_layer=0, **kwargs)
 
-                torch.save(cam, '/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/tcga_lung/graphcam/{}_cam_{}.pt'.format(file_names[0][0],index_))
+                torch.save(cam, '/home/admin_ofourkioti/Documents/data/colon/graphcam_4/{}_cam_{}.pt'.format(file_names[0][0],index_))
 
         return pred,labels,loss, prob

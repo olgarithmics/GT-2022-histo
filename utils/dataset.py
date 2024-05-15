@@ -51,9 +51,9 @@ class GraphDataset(data.Dataset):
         self.ids = ids
         #self.target_patch_size = target_patch_size
         #self.classdict = {'normal': 0, 'luad': 1, 'lscc': 2}        #
-        self.classdict = {'normal_tissue': 0, 'tumor_tissue': 1}        #
+        #self.classdict = {'normal_tissue': 0, 'tumor_tissue': 1}        #
         #self.classdict = {'CRCC': 0, 'PRCC': 1,'CCRCC':2}
-        #self.classdict = { 'LUAD': 0, 'LUSC': 1}
+        self.classdict = { 'LUAD': 0, 'LUSC': 1}
         #self._up_kwargs = {'mode': 'bilinear'}
         #self.classdict = {'normal': 0, 'pdac': 1, 'pancreatitis': 2}
 
