@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
 #SBATCH --time=100:00:00
-#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/train_cam17.out
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/train_brca.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/train.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
@@ -24,12 +24,12 @@ cd /home/ofourkioti/Projects/GT-2022-histo/
 #--log_interval_local 5
 
 for i in {0..4};
-do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/lung/" \
---train_set "/home/ofourkioti/Projects/HistoTree/tcga_lung_files/train_${i}.txt" \
---val_set "/home/ofourkioti/Projects/HistoTree/tcga_lung_files//val_${i}.txt" \
+do CUDA_VISIBLE_DEVICES=0 python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/" \
+--train_set "/home/ofourkioti/Projects/HistoTree/brca_files/train_${i}.txt" \
+--val_set "/home/ofourkioti/Projects/HistoTree/brca_files/val_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
---task_name "gtp_lung_${i}" \
+--task_name "gtp_brca_${i}" \
 --batch_size 4 \
 --train \
 --log_interval_local 5
