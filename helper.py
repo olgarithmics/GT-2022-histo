@@ -35,7 +35,7 @@ def preparefeatureLabel(batch_graph, batch_label, batch_adjs, name):
     
     masks = torch.zeros(batch_size, max_node_num)
     adjs =  torch.zeros(batch_size, max_node_num, max_node_num)
-    batch_node_feat = torch.zeros(batch_size, max_node_num, 512)
+    batch_node_feat = torch.zeros(batch_size, max_node_num, 1024)
     names=[]
 
     for i in range(batch_size):

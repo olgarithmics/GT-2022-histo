@@ -74,7 +74,7 @@ class GraphDataset(data.Dataset):
             features = torch.load(feature_path, map_location=lambda storage, loc: storage)
         else:
             print(feature_path + ' not exists')
-            features = torch.zeros(1, 512)
+            features = torch.zeros(1, 1024)
 
         #adj_s_path = os.path.join(self.root, file_name, 'adj_s.pt')
         adj_s_path = os.path.join(file_path, file_name, 'adj_s.pt')
