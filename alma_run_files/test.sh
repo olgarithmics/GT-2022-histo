@@ -17,9 +17,7 @@ cd /home/ofourkioti/Projects/GT-2022-histo/
 
 for i in {0..5};
 do export CUDA_VISIBLE_DEVICES=0
-python main.py \
---n_class 2 \
---data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/"  \
+python main.py --n_class 2 --data_path "/data/scratch/DBI/DUDBI/DYNCESYS/OlgaF/tmi/brca/"\
 --val_set "/home/ofourkioti/Projects/HistoTree/brca_files/test_${i}.txt" \
 --model_path "graph_transformer/saved_models/" \
 --log_path "graph_transformer/runs/" \
@@ -29,3 +27,4 @@ python main.py \
 --log_interval_local 5 \
 --resume "graph_transformer/saved_models/gtp_brca_${i}.pth"
 done
+
