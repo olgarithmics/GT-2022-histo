@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
 #SBATCH --time=100:00:00
-#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/test_brca.out
+#SBATCH --output=/home/ofourkioti/Projects/GT-2022-histo/results/test_rcc.out
 #SBATCH --error=/home/ofourkioti/Projects/GT-2022-histo/results/error.err
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpuhm
