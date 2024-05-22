@@ -168,10 +168,10 @@ for epoch in range(num_epochs):
 
             auc = roc_auc_score(slide_labels, slide_probs, average="macro", multi_class='ovr')
             #
-            # fscore = f1_score(slide_labels, slide_preds , average="macro")
+            fscore = f1_score(slide_labels, slide_preds , average="macro")
             print('[%d/%d] val agg acc: %.3f' % (total_val_num, total_val_num, evaluator.get_scores()))
             print('[%d/%d] val AUC: %.3f' % (total_val_num, total_val_num, auc))
-            # print('[%d/%d] val fscore: %.3f' % (total_val_num, total_val_num, fscore))
+            print('[%d/%d] val fscore: %.3f' % (total_val_num, total_val_num, fscore))
             # print('[%d/%d] val recall: %.3f' % (total_val_num, total_val_num, recall))
             # print('[%d/%d] val precision: %.3f' % (total_val_num, total_val_num, precision))
 
